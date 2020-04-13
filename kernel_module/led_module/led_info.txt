@@ -1,0 +1,33 @@
+Hardware
+
+Pin:
+    VDD50_EN, Xmmc1CMD/GPK1_1
+
+6.2.3.7 GPK1CON
+ Base Address: 0x1100_0000
+ Address = Base Address + 0x0060, Reset Value = 0x0000_0000 
+GPK1CON[1] [7:4]
+    0x0 = Input
+    0x1 = Output
+    0x2 = SD_1_CMD
+    0x3 to 0xE = Reserved
+    0xF = EXT_INT24[1]
+
+configure: 
+    *((volatile unsigned long *)(0x11000060)) &= 0xff0f 
+    *((volatile unsigned long *)(0x11000060)) |= 0x0010 
+
+6.2.3.8 GPK1DAT
+ Base Address: 0x1100_0000
+ Address = Base Address + 0x0064, Reset Value = 0x00
+
+GPK1DAT[6:0] [6:0] 
+    1. When you configure port as input port, the corresponding bit is the pin state. 
+    2. When configuring as output port, the pin state should be same as the corresponding bit. 
+    3. When the port is configured as functional pin, the undefined value will be read.
+
+configure: 
+    led on: *((volatile unsigned long *)(0x11000064)) &= 0xfffd 
+            *((volatile unsigned long *)(0x11000064)) |= 0x0002 
+       off: *((volatile unsigned long *)(0x11000064)) &= 0xfffd 
+
